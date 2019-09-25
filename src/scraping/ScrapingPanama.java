@@ -20,6 +20,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.w3c.dom.Attr;
 
+
+
 public class ScrapingPanama {
 
 	public static final String xmlFilePath = "xmlfile.xml";
@@ -29,17 +31,30 @@ public class ScrapingPanama {
 
 		String url = "http://visas.migracion.gob.pa/SIVA/verif_citas/";
 		String minutos = args[0];
+		String email = args[1];
 		int minutosInt = Integer.parseInt(minutos);
+		int contador = 0;
 		System.out.println("Info cada "+minutos+" minutos");
+		System.out.println("Info a email "+email);
+		
+		Report rep = new Report();
 
 		while (true) {
 			if (getStatusConnectionCode(url) == 200) {
 				Document documento = getHtmlDocument(url);
 				java.util.Date utilDate = new java.util.Date();
 				Elements elementos = documento.select("a");
-				
+				if(elementos.size() > 1) {
+					rep.sendMail(email,"Alerta aparecio el Link");
+				}
 				System.out.print(elementos.size());
 				System.out.println("-"+utilDate.toString());
+				if(contador > 60) {
+					rep.sendMail(email,"Funcionando sin novedad");
+					contador = 0;
+				}
+				contador++;
+				
 				
 			} else {
 				System.out.println("no conectado");
