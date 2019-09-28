@@ -33,7 +33,9 @@ public class ScrapingPanama {
 		String minutos = args[0];
 		String email = args[1];
 		int minutosInt = Integer.parseInt(minutos);
-		int contador = 0;
+		Date Inicio = new java.util.Date();
+		Date utilDate = new java.util.Date();
+		int diferencia;
 		System.out.println("Info cada "+minutos+" minutos");
 		System.out.println("Info a email "+email);
 		
@@ -42,18 +44,18 @@ public class ScrapingPanama {
 		while (true) {
 			if (getStatusConnectionCode(url) == 200) {
 				Document documento = getHtmlDocument(url);
-				java.util.Date utilDate = new java.util.Date();
+				utilDate = new java.util.Date();
 				Elements elementos = documento.select("a");
 				if(elementos.size() > 1) {
 					rep.sendMail(email,"Alerta aparecio el Link");
 				}
+				diferencia=(int) ((utilDate.getTime()-Inicio.getTime()));
 				System.out.print(elementos.size());
 				System.out.println("-"+utilDate.toString());
-				if(contador > 60) {
+				if(diferencia > 3600000) {
 					rep.sendMail(email,"Funcionando sin novedad");
-					contador = 0;
+					Inicio = utilDate;
 				}
-				contador++;
 				
 				
 			} else {
@@ -62,6 +64,7 @@ public class ScrapingPanama {
 			
 			try {
 				Thread.sleep(60000*minutosInt);
+				//Thread.sleep(10000*minutosInt);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

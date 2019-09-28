@@ -23,7 +23,7 @@ public class Report {
         //Establishing a session with required user details
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("enviemosinfo@gmail.com", "Amigos.2019");
+                return new PasswordAuthentication("enviemosinfo2@gmail.com", "Amigos.2019");
             }
         });
         try {
